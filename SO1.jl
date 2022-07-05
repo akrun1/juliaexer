@@ -29,6 +29,12 @@ using Genie
 # ╔═╡ 43e4bb10-553d-411a-816f-5457da2c65bf
 using CSV
 
+# ╔═╡ 8b095784-1b7d-45ed-b59f-c226a272c4e3
+using CategoricalArrays
+
+# ╔═╡ e9ad49c0-ceb6-4315-ad84-1bcc019cd128
+using DataFramesMeta
+
 # ╔═╡ 1393e9ac-f584-11ec-2e80-eb23799e9841
 md"""#### Fill an empty array (Vector of vectors) in Julia using for loop
   """
@@ -160,18 +166,66 @@ bnew[3, 2, 2] = 1
 # ╔═╡ 57984a11-607d-48ed-97ce-cc5a8d44511f
 bnew[3, :, :]
 
+# ╔═╡ f1abacdc-e692-4e09-a614-71da815551a7
+md"""#### Is there as.factor analogue in Julia?
+"""
+
+# ╔═╡ f3d13963-3c5e-472f-a509-b2448f622f36
+df1 = DataFrame(a = 1:3, b = 'a':'c')
+
+# ╔═╡ 341d3c0c-7710-4dc6-815a-8f9714adadc4
+@transform(df1, :b = categorical(:b))
+
+# ╔═╡ ffba5c41-9f67-4c1d-9274-97d33e7e307c
+md"""#### Replacing a column in a DF from another DF in Julia
+"""
+
+# ╔═╡ 7e69c530-9633-44c0-8cdf-53d9b3a8dd01
+df1new = DataFrame(id=["a", "a", "a", "b", "b", "b", "c", "c", "c", "d", "d"],
+    var=[1, 32, 3, 22, 5, 4, 6, 7, 8, 4, 3])
+
+# ╔═╡ 3a9b2f63-e659-499b-aa86-cddba100b6d9
+df2new = DataFrame(id=["a", "a", "b", "b", "b", "c", "c", "c"],
+    var=[1, 1, 2, 2, 2, 6, 6, 6])
+
+# ╔═╡ 62629221-1df5-4f69-9462-0f563db7d3bc
+leftjoin!(df1new, unique(df2new, :id), on = :id, makeunique = true)
+
+# ╔═╡ ceb9909f-bef3-4009-acdd-a93779708d35
+select!(df1new, :id, [:var_1, :var] => ByRow(coalesce) => :var)
+
+# ╔═╡ df5d9f48-7242-4f50-afba-b02491c2c593
+md"""#### Performance of the splat operator when accessing a matrix
+"""
+
+# ╔═╡ 07efaef5-5cc2-4c21-8980-d018dc1d8e95
+matrix = Matrix{Float64}(undef, 5000, 4000)
+
+# ╔═╡ 97750c76-419c-425f-b5b4-89b2c0fb9b34
+point = [1244, 3353]
+
+# ╔═╡ df7e4997-3343-4116-bcdb-940ae50acd91
+matrix[point...]
+
+# ╔═╡ 966925d3-fcce-4406-bfa9-9700fc88a8dd
+
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+CategoricalArrays = "324d7699-5711-5eae-9e2f-1d82baa6b597"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 
 [compat]
 CSV = "~0.10.4"
+CategoricalArrays = "~0.10.6"
 DataFrames = "~1.3.4"
+DataFramesMeta = "~0.11.0"
 Genie = "~4.18.1"
 StructArrays = "~0.6.11"
 """
@@ -216,6 +270,17 @@ git-tree-sha1 = "873fb188a4b9d76549b81465b1f75c82aaf59238"
 uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 version = "0.10.4"
 
+[[deps.CategoricalArrays]]
+deps = ["DataAPI", "Future", "Missings", "Printf", "Requires", "Statistics", "Unicode"]
+git-tree-sha1 = "5f5a975d996026a8dd877c35fe26a7b8179c02ba"
+uuid = "324d7699-5711-5eae-9e2f-1d82baa6b597"
+version = "0.10.6"
+
+[[deps.Chain]]
+git-tree-sha1 = "339237319ef4712e6e5df7758d0bccddf5c237d9"
+uuid = "8be319e6-bccf-4806-a6f7-6fae938471bc"
+version = "0.4.10"
+
 [[deps.CodeTracking]]
 deps = ["InteractiveUtils", "UUIDs"]
 git-tree-sha1 = "6d4fa04343a7fc9f9cb9cff9558929f3d2752717"
@@ -259,6 +324,12 @@ deps = ["Compat", "DataAPI", "Future", "InvertedIndices", "IteratorInterfaceExte
 git-tree-sha1 = "daa21eb85147f72e41f6352a57fccea377e310a9"
 uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 version = "1.3.4"
+
+[[deps.DataFramesMeta]]
+deps = ["Chain", "DataFrames", "MacroTools", "OrderedCollections", "Reexport"]
+git-tree-sha1 = "f1d89a07475dc4b03c08543d1c6b4b2945f33eca"
+uuid = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
+version = "0.11.0"
 
 [[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
@@ -432,6 +503,12 @@ deps = ["JuliaInterpreter"]
 git-tree-sha1 = "dedbebe234e06e1ddad435f5c6f4b85cd8ce55f7"
 uuid = "6f1432cf-f94c-5a45-995e-cdbf5db27b0b"
 version = "2.2.2"
+
+[[deps.MacroTools]]
+deps = ["Markdown", "Random"]
+git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
+uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+version = "0.5.9"
 
 [[deps.Markdown]]
 deps = ["Base64"]
@@ -769,5 +846,20 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═d6426a5a-1ccf-49e3-bce6-3a1060f7d974
 # ╠═058051c9-fece-400a-809d-7b5e7861fcac
 # ╠═57984a11-607d-48ed-97ce-cc5a8d44511f
+# ╟─f1abacdc-e692-4e09-a614-71da815551a7
+# ╠═f3d13963-3c5e-472f-a509-b2448f622f36
+# ╠═8b095784-1b7d-45ed-b59f-c226a272c4e3
+# ╠═e9ad49c0-ceb6-4315-ad84-1bcc019cd128
+# ╠═341d3c0c-7710-4dc6-815a-8f9714adadc4
+# ╟─ffba5c41-9f67-4c1d-9274-97d33e7e307c
+# ╠═7e69c530-9633-44c0-8cdf-53d9b3a8dd01
+# ╠═3a9b2f63-e659-499b-aa86-cddba100b6d9
+# ╠═62629221-1df5-4f69-9462-0f563db7d3bc
+# ╠═ceb9909f-bef3-4009-acdd-a93779708d35
+# ╟─df5d9f48-7242-4f50-afba-b02491c2c593
+# ╠═07efaef5-5cc2-4c21-8980-d018dc1d8e95
+# ╠═97750c76-419c-425f-b5b4-89b2c0fb9b34
+# ╠═df7e4997-3343-4116-bcdb-940ae50acd91
+# ╠═966925d3-fcce-4406-bfa9-9700fc88a8dd
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
