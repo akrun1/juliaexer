@@ -35,6 +35,9 @@ using CategoricalArrays
 # ╔═╡ e9ad49c0-ceb6-4315-ad84-1bcc019cd128
 using DataFramesMeta
 
+# ╔═╡ 35b7b0e3-9239-4b09-a5c4-12dc7461009c
+using Format: generate_formatter, format
+
 # ╔═╡ 1393e9ac-f584-11ec-2e80-eb23799e9841
 md"""#### Fill an empty array (Vector of vectors) in Julia using for loop
   """
@@ -208,7 +211,38 @@ point = [1244, 3353]
 matrix[point...]
 
 # ╔═╡ 966925d3-fcce-4406-bfa9-9700fc88a8dd
+md"""#### Add thousands separator to column in dataframe in julia
+"""
 
+# ╔═╡ 1f057a55-e932-4c26-a2b3-04e66c7e9371
+ v = [10^6, 2*10^5, 3*10^4]
+
+# ╔═╡ 2157f0ed-fd68-460c-a324-20a30e331884
+df3= DataFrame(a = v, b = v) 
+
+# ╔═╡ 478b55a8-073c-4644-9348-09bb44c7b844
+df3
+
+# ╔═╡ 6686ae70-b8b9-4f86-9ac2-ffacebc6a891
+commaformatter = generate_formatter("%'d")
+
+# ╔═╡ 6fcffd7f-0432-4fff-b3f5-0841ca58134d
+#@transform!(df3, :b = commaformatter.(:a))
+
+# ╔═╡ b5b12a44-2097-4a35-983f-f502efeb0166
+
+
+# ╔═╡ 68e88af1-ca12-4149-afd2-8fc24c9bb573
+f(x) = format(x, commas = true)
+
+# ╔═╡ 21b4b46b-efd9-4e42-a06b-96f8c2eccec3
+transform(df3, :b => ByRow(f), renamecols = false)
+
+# ╔═╡ 4fe73c1d-d739-48ce-bad2-0b1507167f7e
+transform!(df3, :a => ByRow(f) => :a_new)
+
+# ╔═╡ 9c938ba7-2a27-4a5f-8b16-e39aab32d466
+df3
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -217,6 +251,7 @@ CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 CategoricalArrays = "324d7699-5711-5eae-9e2f-1d82baa6b597"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
+Format = "1fa38f19-a742-5d3f-a2b9-30dd87b9d5f8"
 Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
@@ -226,6 +261,7 @@ CSV = "~0.10.4"
 CategoricalArrays = "~0.10.6"
 DataFrames = "~1.3.4"
 DataFramesMeta = "~0.11.0"
+Format = "~1.3.2"
 Genie = "~4.18.1"
 StructArrays = "~0.6.11"
 """
@@ -372,6 +408,11 @@ version = "0.9.18"
 
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
+
+[[deps.Format]]
+git-tree-sha1 = "03bcdf8ab1a5b9e6455ccb45c30910d282aa09f4"
+uuid = "1fa38f19-a742-5d3f-a2b9-30dd87b9d5f8"
+version = "1.3.2"
 
 [[deps.Formatting]]
 deps = ["Printf"]
@@ -860,6 +901,17 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═07efaef5-5cc2-4c21-8980-d018dc1d8e95
 # ╠═97750c76-419c-425f-b5b4-89b2c0fb9b34
 # ╠═df7e4997-3343-4116-bcdb-940ae50acd91
-# ╠═966925d3-fcce-4406-bfa9-9700fc88a8dd
+# ╟─966925d3-fcce-4406-bfa9-9700fc88a8dd
+# ╠═35b7b0e3-9239-4b09-a5c4-12dc7461009c
+# ╠═1f057a55-e932-4c26-a2b3-04e66c7e9371
+# ╠═2157f0ed-fd68-460c-a324-20a30e331884
+# ╠═478b55a8-073c-4644-9348-09bb44c7b844
+# ╠═6686ae70-b8b9-4f86-9ac2-ffacebc6a891
+# ╠═6fcffd7f-0432-4fff-b3f5-0841ca58134d
+# ╠═b5b12a44-2097-4a35-983f-f502efeb0166
+# ╠═68e88af1-ca12-4149-afd2-8fc24c9bb573
+# ╠═21b4b46b-efd9-4e42-a06b-96f8c2eccec3
+# ╠═4fe73c1d-d739-48ce-bad2-0b1507167f7e
+# ╠═9c938ba7-2a27-4a5f-8b16-e39aab32d466
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
