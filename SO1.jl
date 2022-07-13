@@ -89,12 +89,6 @@ begin
 	sort!(StructArray((a1, b1)))
 end
 
-# ╔═╡ 3747ea77-5cf0-4e4b-9d8c-6d38507de488
-begin
-	using DataFrames
-	sortperm(DataFrame(a1=a1,b1=b1, copycols=false))
-end
-
 # ╔═╡ 44094652-2ced-4ae1-a36f-484a0d7602a5
 md"""#### Renaming multiple columns in Julia DataFrames
 """
@@ -244,6 +238,51 @@ transform!(df3, :a => ByRow(f) => :a_new)
 # ╔═╡ 9c938ba7-2a27-4a5f-8b16-e39aab32d466
 df3
 
+# ╔═╡ 7a349b41-00ab-45a6-a514-d2f13e581cc6
+md""" #### How to convert a vector of vectors into a DataFrame in Julia, without for loop?
+"""
+
+# ╔═╡ 026ec71a-f652-4ead-869c-f776c1a3e8ba
+begin
+	list_of_numbers = 1:17
+
+	all_arrays = [zeros(Float64, (17,)) for i in 1:1000]
+	round = 1
+	while round != 1001
+	    random_array = StatsBase.sample(1:17 , length(list_of_numbers))
+	    random_array = random_array/sum(random_array)
+	
+	    if (0.0 in random_array) || (random_array in all_arrays)
+	        continue
+	    end
+	
+	    all_arrays[round] = random_array
+	    round += 1
+	    #println(round)
+	end
+end
+
+# ╔═╡ aa90633c-beb0-444a-ae2d-796ad7963470
+DataFrame([getindex.(all_arrays, i) for i in 1:17], :auto, copycols = false)
+
+# ╔═╡ 0cac0599-04fb-45e2-80bf-6c79ca207656
+
+
+# ╔═╡ 4ce5609d-0444-4cf4-8437-649575665ee5
+
+
+# ╔═╡ 3747ea77-5cf0-4e4b-9d8c-6d38507de488
+begin
+	using DataFrames
+	sortperm(DataFrame(a1=a1,b1=b1, copycols=false))
+end
+
+# ╔═╡ f639b1ee-d998-428f-aa23-6be306901263
+begin
+	using DataFrames
+	using StatsBase
+end
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -254,6 +293,7 @@ DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 Format = "1fa38f19-a742-5d3f-a2b9-30dd87b9d5f8"
 Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 
 [compat]
@@ -263,6 +303,7 @@ DataFrames = "~1.3.4"
 DataFramesMeta = "~0.11.0"
 Format = "~1.3.2"
 Genie = "~4.18.1"
+StatsBase = "~0.33.18"
 StructArrays = "~0.6.11"
 """
 
@@ -316,6 +357,18 @@ version = "0.10.6"
 git-tree-sha1 = "339237319ef4712e6e5df7758d0bccddf5c237d9"
 uuid = "8be319e6-bccf-4806-a6f7-6fae938471bc"
 version = "0.4.10"
+
+[[deps.ChainRulesCore]]
+deps = ["Compat", "LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "2dd813e5f2f7eec2d1268c57cf2373d3ee91fcea"
+uuid = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+version = "1.15.1"
+
+[[deps.ChangesOfVariables]]
+deps = ["ChainRulesCore", "LinearAlgebra", "Test"]
+git-tree-sha1 = "1e315e3f4b0b7ce40feded39c73049692126cf53"
+uuid = "9e997f8a-9a97-42d5-a9f1-ce6bfc15e2c0"
+version = "0.1.3"
 
 [[deps.CodeTracking]]
 deps = ["InteractiveUtils", "UUIDs"]
@@ -389,6 +442,12 @@ uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 [[deps.Distributed]]
 deps = ["Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[deps.DocStringExtensions]]
+deps = ["LibGit2"]
+git-tree-sha1 = "b19534d1895d702889b219c382a6e18010797f0b"
+uuid = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+version = "0.8.6"
 
 [[deps.Downloads]]
 deps = ["ArgTools", "FileWatching", "LibCURL", "NetworkOptions"]
@@ -467,10 +526,21 @@ version = "1.1.2"
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
+[[deps.InverseFunctions]]
+deps = ["Test"]
+git-tree-sha1 = "b3364212fb5d870f724876ffcd34dd8ec6d98918"
+uuid = "3587e190-3f89-42d0-90ee-14403ec27112"
+version = "0.1.7"
+
 [[deps.InvertedIndices]]
 git-tree-sha1 = "bee5f1ef5bf65df56bdd2e40447590b272a5471f"
 uuid = "41ab1584-1d38-5bbf-9106-f11c6c58b48f"
 version = "1.1.0"
+
+[[deps.IrrationalConstants]]
+git-tree-sha1 = "7fd44fd4ff43fc60815f8e764c0f352b83c49151"
+uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
+version = "0.1.1"
 
 [[deps.IteratorInterfaceExtensions]]
 git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
@@ -535,6 +605,12 @@ version = "1.16.1+1"
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[[deps.LogExpFunctions]]
+deps = ["ChainRulesCore", "ChangesOfVariables", "DocStringExtensions", "InverseFunctions", "IrrationalConstants", "LinearAlgebra"]
+git-tree-sha1 = "09e4b894ce6a976c354a69041a04748180d43637"
+uuid = "2ab3a3ac-af41-5b50-aa03-7779005ae688"
+version = "0.3.15"
 
 [[deps.Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -723,6 +799,18 @@ version = "1.0.0"
 [[deps.Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
 uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[[deps.StatsAPI]]
+deps = ["LinearAlgebra"]
+git-tree-sha1 = "2c11d7290036fe7aac9038ff312d3b3a2a5bf89e"
+uuid = "82ae8749-77ed-4fe6-ae5f-f523153014b0"
+version = "1.4.0"
+
+[[deps.StatsBase]]
+deps = ["DataAPI", "DataStructures", "LinearAlgebra", "LogExpFunctions", "Missings", "Printf", "Random", "SortingAlgorithms", "SparseArrays", "Statistics", "StatsAPI"]
+git-tree-sha1 = "48598584bacbebf7d30e20880438ed1d24b7c7d6"
+uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+version = "0.33.18"
 
 [[deps.StringEncodings]]
 deps = ["Libiconv_jll"]
@@ -913,5 +1001,11 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═21b4b46b-efd9-4e42-a06b-96f8c2eccec3
 # ╠═4fe73c1d-d739-48ce-bad2-0b1507167f7e
 # ╠═9c938ba7-2a27-4a5f-8b16-e39aab32d466
+# ╟─7a349b41-00ab-45a6-a514-d2f13e581cc6
+# ╠═f639b1ee-d998-428f-aa23-6be306901263
+# ╠═026ec71a-f652-4ead-869c-f776c1a3e8ba
+# ╠═aa90633c-beb0-444a-ae2d-796ad7963470
+# ╠═0cac0599-04fb-45e2-80bf-6c79ca207656
+# ╠═4ce5609d-0444-4cf4-8437-649575665ee5
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
