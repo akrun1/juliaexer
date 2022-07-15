@@ -4,6 +4,16 @@
 using Markdown
 using InteractiveUtils
 
+# ╔═╡ 4ce5609d-0444-4cf4-8437-649575665ee5
+begin
+	using Pkg
+	function pkgdeps(pkg::AbstractString)
+		uuid = Pkg.project().dependencies[pkg]
+		pkginfo = Pkg.dependencies()[uuid]
+		return pkginfo.dependencies
+	end
+end
+
 # ╔═╡ 7c2bbd9f-f64d-445a-8f02-a2b28d3c7a49
 module B
 	include("t1.jl")
@@ -266,21 +276,29 @@ end
 DataFrame([getindex.(all_arrays, i) for i in 1:17], :auto, copycols = false)
 
 # ╔═╡ 0cac0599-04fb-45e2-80bf-6c79ca207656
+md""" #### Check a function belongs to which package in Julia
+"""
 
+# ╔═╡ 48ba07d1-c674-4a42-ac5b-ab02ad22ce50
+pkgdeps("DataFrames")
 
-# ╔═╡ 4ce5609d-0444-4cf4-8437-649575665ee5
+# ╔═╡ 9c388fc4-0c79-4f4e-8b79-b66412db32ce
+md""" #### create a vector increased by 0.5 in julia
+"""
 
-
-# ╔═╡ 3747ea77-5cf0-4e4b-9d8c-6d38507de488
-begin
-	using DataFrames
-	sortperm(DataFrame(a1=a1,b1=b1, copycols=false))
-end
+# ╔═╡ 63706251-e96e-4987-a48d-dd0c1f0bf44e
+collect(0:0.5:20)
 
 # ╔═╡ f639b1ee-d998-428f-aa23-6be306901263
 begin
 	using DataFrames
 	using StatsBase
+end
+
+# ╔═╡ 3747ea77-5cf0-4e4b-9d8c-6d38507de488
+begin
+	using DataFrames
+	sortperm(DataFrame(a1=a1,b1=b1, copycols=false))
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -293,6 +311,7 @@ DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 Format = "1fa38f19-a742-5d3f-a2b9-30dd87b9d5f8"
 Genie = "c43c736e-a2d1-11e8-161f-af95117fbd1e"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 
@@ -1005,7 +1024,10 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═f639b1ee-d998-428f-aa23-6be306901263
 # ╠═026ec71a-f652-4ead-869c-f776c1a3e8ba
 # ╠═aa90633c-beb0-444a-ae2d-796ad7963470
-# ╠═0cac0599-04fb-45e2-80bf-6c79ca207656
+# ╟─0cac0599-04fb-45e2-80bf-6c79ca207656
 # ╠═4ce5609d-0444-4cf4-8437-649575665ee5
+# ╠═48ba07d1-c674-4a42-ac5b-ab02ad22ce50
+# ╟─9c388fc4-0c79-4f4e-8b79-b66412db32ce
+# ╠═63706251-e96e-4987-a48d-dd0c1f0bf44e
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
