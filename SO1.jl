@@ -289,6 +289,32 @@ md""" #### create a vector increased by 0.5 in julia
 # ╔═╡ 63706251-e96e-4987-a48d-dd0c1f0bf44e
 collect(0:0.5:20)
 
+# ╔═╡ ba68a752-9aaf-4d39-9a01-dad3b88bf523
+md""" #### Check if a record exists in a Julia array
+"""
+
+# ╔═╡ 0c17ec71-04c5-43e1-a739-959cb8fa75ce
+A = [1.0 2.0 3.0; 4.0 5.0 6.0]
+
+# ╔═╡ bcf49002-5b76-4d95-89b9-f0f5a9d34a4e
+bA = [1.0 2.0 3.0] 
+
+# ╔═╡ bca8da0c-8780-419b-9152-48790b4022ea
+findfirst(==(vec(bA)), eachrow(A))
+
+# ╔═╡ edb03d47-6e5b-4145-9e0f-86c0dc7aaac7
+vec(bA) in eachrow(A)
+
+# ╔═╡ 5e005637-76eb-4488-b5ad-350eefd83231
+md""" #### Convert a vector of positive/negative elements to all positive elements in Julia?
+"""
+
+# ╔═╡ 09a5c550-c8c9-4956-93b8-f2d7294ed9b9
+A1=[1;-3;5;-7]
+
+# ╔═╡ 3e42b3c5-89c0-42a3-be87-243d97c90b2b
+abs.(A1)
+
 # ╔═╡ f639b1ee-d998-428f-aa23-6be306901263
 begin
 	using DataFrames
@@ -1029,5 +1055,13 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═48ba07d1-c674-4a42-ac5b-ab02ad22ce50
 # ╟─9c388fc4-0c79-4f4e-8b79-b66412db32ce
 # ╠═63706251-e96e-4987-a48d-dd0c1f0bf44e
+# ╟─ba68a752-9aaf-4d39-9a01-dad3b88bf523
+# ╠═0c17ec71-04c5-43e1-a739-959cb8fa75ce
+# ╠═bcf49002-5b76-4d95-89b9-f0f5a9d34a4e
+# ╠═bca8da0c-8780-419b-9152-48790b4022ea
+# ╠═edb03d47-6e5b-4145-9e0f-86c0dc7aaac7
+# ╟─5e005637-76eb-4488-b5ad-350eefd83231
+# ╠═09a5c550-c8c9-4956-93b8-f2d7294ed9b9
+# ╠═3e42b3c5-89c0-42a3-be87-243d97c90b2b
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
